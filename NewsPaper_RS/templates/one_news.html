@@ -1,0 +1,54 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+<h1> Текущая новость </h1>
+{{ one_news }}
+<hr>
+<table>
+    <tr>
+        <td> Заголовок</td>
+        <td> Категория</td>
+        <td> Дата публикации</td>
+        <td> Содержание</td>
+        <td> Автор</td>
+    </tr>
+    <tr>
+        <td> {{ one_news.post_title }}</td>
+        <td>
+            {% for category in one_news.category.all %}
+                <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+            {% endfor %}
+        </td>
+        <td> {{ one_news.post_date_time|date:'d M Y' }}</td>
+        <td> {{ one_news.post_text|censor }}</td>
+        <td> {{ one_news.author }}</td>
+    </tr>
+</table>
+<hr>
+<hr>
+<h3> Комментарии к новости/статье: </h3>
+{% if comments %}
+    <table>
+            <tr>
+                <td> Сообщение </td>
+                <td> Дата </td>
+                <td> Комментатор </td>
+            </tr>
+            {% for item in comments %}
+            <tr>
+                <td> {{ item.comment_text }} </td>
+                <td> {{ item.comment_date_time|date:'d M Y' }} </td>
+                <td> {{ item.user }} </td>
+            </tr>
+            {% endfor %}
+        </table>
+{% else %}
+        <h5> Комментариев нет </h5>
+{% endif %}
+{% endblock content %}
